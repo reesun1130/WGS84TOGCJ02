@@ -14,33 +14,6 @@ const double pi = 3.14159265358979324;
 
 @implementation WGS84TOGCJ02
 
-//+ (CLLocationCoordinate2D)transformFromWGSToGCJ:(CLLocationCoordinate2D)wgsLoc
-//{
-//    CLLocationCoordinate2D adjustLoc;
-//    
-//    if(outOfChina(wgsLoc.latitude,wgsLoc.longitude))
-//    {
-//        adjustLoc = wgsLoc;
-//    }
-//    else
-//    {
-//        double adjustLat = transformLat(wgsLoc.longitude - 105.0,wgsLoc.latitude - 35.0);
-//        double adjustLon = transformLon(wgsLoc.longitude - 105.0,wgsLoc.latitude - 35.0);
-//        double radLat = wgsLoc.latitude / 180.0 * pi;
-//        double magic = sin(radLat);
-//        
-//        magic = 1 - ee * magic * magic;
-//        
-//        double sqrtMagic = sqrt(magic);
-//        
-//        adjustLat = (adjustLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * pi);
-//        adjustLon = (adjustLon * 180.0) / (a / sqrtMagic * cos(radLat) * pi);
-//        adjustLoc.latitude = wgsLoc.latitude + adjustLat;
-//        adjustLoc.longitude = wgsLoc.longitude + adjustLon;
-//    }
-//    return adjustLoc;
-//}
-
 int outOfChina(double lat, double lng)
 {
     if (lng < 72.004 || lng > 137.8347)
@@ -132,13 +105,9 @@ Location transformFromGCJToWGS(Location gcLoc)
 ///
 ///  Transform GCJ-02 to BD-09
 ///
-const double x_pi = 3.14159265358979324 * 3000.0 / 180.0;
 Location bd_encrypt(Location gcLoc)
 {
-    double x = gcLoc.lng, y = gcLoc.lat;
-    double z = sqrt(x * x + y * y) + 0.00002 * sin(y * x_pi);
-    double theta = atan2(y, x) + 0.000003 * cos(x * x_pi);
-    return LocationMake(z * cos(theta) + 0.0065, z * sin(theta) + 0.006);
+    return LocationMake(gcLoc.lat + 0.006,gcLoc.lng + 0.0065);
 }
 
 ///
@@ -146,10 +115,7 @@ Location bd_encrypt(Location gcLoc)
 ///
 Location bd_decrypt(Location bdLoc)
 {
-    double x = bdLoc.lng - 0.0065, y = bdLoc.lat - 0.006;
-    double z = sqrt(x * x + y * y) - 0.00002 * sin(y * x_pi);
-    double theta = atan2(y, x) - 0.000003 * cos(x * x_pi);
-    return LocationMake(z * cos(theta), z * sin(theta));
+    return LocationMake(bdLoc.lat - 0.006,bdLoc.lng - 0.0065);
 }
 
 @end
