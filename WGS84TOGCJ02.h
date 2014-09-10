@@ -63,20 +63,20 @@ Location transformFromWGSToGCJ(Location wgLoc);
 Location transformFromGCJToWGS(Location gcLoc);
 
 /**
- *  中国坐标-》百度坐标
+ *  标准坐标-》百度坐标
  *
- *  @param gcLoc 中国坐标
+ *  @param gcLoc 标准坐标
  *
  *  @return 百度坐标
  */
 Location bd_encrypt(Location gcLoc);
 
 /**
- *  百度坐标-》中国坐标
+ *  百度坐标-》标准坐标
  *
  *  @param gcLoc 百度坐标
  *
- *  @return 中国坐标
+ *  @return 标准坐标
  */
 Location bd_decrypt(Location bdLoc);
 
